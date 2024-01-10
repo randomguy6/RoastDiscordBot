@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { log } = require('console');
 const { Client, GatewayIntentBits, Events, SlashCommandBuilder } = require("discord.js");
 const client = new Client(
     {
@@ -7,7 +6,6 @@ const client = new Client(
             [
                 GatewayIntentBits.Guilds,
                 GatewayIntentBits.GuildMessages,
-                GatewayIntentBits.DirectMessages,
                 GatewayIntentBits.MessageContent
             ]
     }
@@ -18,8 +16,12 @@ client.on(Events.ClientReady, () => {
 });
 
 client.on(Events.MessageCreate, async (message) => {
-    console.log(message.content);
+    console.log(message);
+    if(message.author.username === 'thegolfdude'){
+        message.reply('U a bitch')
+    }
 });
+
 
 
 client.login(process.env.DISCORD_TOKEN);
