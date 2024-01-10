@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { log } = require('console');
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, GatewayIntentBits, Events, SlashCommandBuilder } = require("discord.js");
 const client = new Client(
     {
         intents:
@@ -13,17 +13,12 @@ const client = new Client(
     }
 );
 
-client.on("ready", () => {
+client.on(Events.ClientReady, () => {
     console.log(`What's up ${client.user.tag}!`)
 });
 
-client.on('interactionCreate', async interaction => {
-    console.log(interaction)
-    if (!interaction.isChatInputCommand()) return;
-
-    if (interaction.commandName === 'ping') {
-        await interaction.reply('Pong!');
-    }
+client.on(Events.MessageCreate, async (message) => {
+    console.log(message.content);
 });
 
 
