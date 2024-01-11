@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  isaiahdiscordbot:
+    image: sadonepu/roastisaiahdiscordbot:1.0.0
+    container_name: isaiahdiscordbot
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/your-database-name
+    restart: always
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+
+volumes:
+  mongo-data:
