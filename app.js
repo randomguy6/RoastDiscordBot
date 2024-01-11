@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Client, IntentsBitField, Events } = require("discord.js");
 const register = require("./src/register-commands")
-const getStupidReply = require("./src/stupidreplies")
+const stupidReply = require("./src/stupidreplies")
 const client = new Client(
     {
         intents:
@@ -29,8 +29,14 @@ client.on(Events.MessageCreate, async (message) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     if(interaction.commandName === 'insult'){
         console.log("Received insult command")
-        interaction.reply(getStupidReply.getStupidReply())
-    } else {
+        interaction.reply(stupidReply.getStupidReply())
+    } else if (interaction.commandName === 'newinsult'){
+        const phrase = interaction.options._hoistedOptions[0].value
+        console.log(interaction.options._hoistedOptions[0].value)
+        console.log("Adding new insult")
+        stupidReply.addStupidReply(phrase)
+        interaction.reply(`Adding new insult: ${phrase}`)
+    }else {
         interaction.reply("You stupid fuck. This doesn't do anything")
     }
 });
