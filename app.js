@@ -21,12 +21,14 @@ client.once(Events.ClientReady, () => {
 
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.username === 'samuraikirby7') {
+        console.log("Isaiah said something")
         message.reply('U a bitch')
     }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
     if(interaction.commandName === 'insult'){
+        console.log("Received insult command")
         interaction.reply(getStupidReply.getStupidReply())
     } else {
         interaction.reply("You stupid fuck. This doesn't do anything")
