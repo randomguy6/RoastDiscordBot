@@ -7,6 +7,7 @@ async function getStupidReply() {
 };
 
 function addStupidReply(reply) {
+  console.log("Saving new insult to database: ", reply);
   addInsult(reply);
 };
 

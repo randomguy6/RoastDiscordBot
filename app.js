@@ -31,9 +31,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
   } else if (interaction.commandName === "newinsult") {
     if (interaction.user.username !== "samuraikirby7") {
       const phrase = interaction.options._hoistedOptions[0].value;
-      console.log("Adding new insult");
       stupidReply.addStupidReply(phrase);
-      interaction.reply(`Adding new insult: ${phrase}`);
+      interaction.reply(`Added new insult: ${phrase}`);
     } else {
       interaction.reply(
         "Fuck you Isaiah! You can't add insults for yourself (unless you want to)"
