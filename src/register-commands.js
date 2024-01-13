@@ -14,6 +14,7 @@ async function register(){
     const commands = await getCommands();
     await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
       body: commands.map((command) => {
+        console.log(`Regestering the ${command.name}`)
         let slashCommand = new SlashCommandBuilder()
           .setName(command.name)
           .setDescription(command.description);
@@ -35,10 +36,13 @@ async function register(){
 };
 
 function handleCommand(interaction){
-  if (interaction.commandName === "insult") {
+  const commandName = interaction.commandName
+  if (commandName === "insult") {
     commandService.insult().then(insult => interaction.reply(insult));
-  } else if (interaction.commandName === "newinsult") {
+  } else if (commandName === "newinsult") {
     interaction.reply(commandService.addNewInsult(interaction.options._hoistedOptions[0].value, interaction.user.username));
+  } else if(commandName === "insultwho"){
+    interaction.reply(commandService.insultNewUser(interaction.options._hoistedOptions[0].value));
   } else {
     interaction.reply("You stupid fuck. I don't know what to fucking do about this!");
   }
