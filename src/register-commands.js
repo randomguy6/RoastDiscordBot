@@ -1,5 +1,6 @@
 const { REST, Routes, SlashCommandBuilder } = require("discord.js");
-const {getCommands} = require("./mongo/mongo-dao")
+const {getCommands} = require("./mongo/mongo-dao");
+const commandService = require('./services/commands-service');
 require("dotenv").config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -7,7 +8,7 @@ const GUILD_ID = process.env.GUILD_ID;
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
-const register = async () => {
+async function register(){
   try {
     console.log("Registering slash commands");
     const commands = await getCommands();
@@ -33,6 +34,17 @@ const register = async () => {
   }
 };
 
+function handleCommand(interaction){
+  if (interaction.commandName === "insult") {
+    commandService.insult().then(insult => interaction.reply(insult));
+  } else if (interaction.commandName === "newinsult") {
+    interaction.reply(commandService.addNewInsult(interaction.options._hoistedOptions[0].value, interaction.user.username));
+  } else {
+    interaction.reply("You stupid fuck. I don't know what to fucking do about this!");
+  }
+}
+
 module.exports = {
   register: register,
+  handleCommand: handleCommand,
 };
