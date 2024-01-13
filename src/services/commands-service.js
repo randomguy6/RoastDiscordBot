@@ -1,20 +1,30 @@
 const stupidReply = require("../stupid-replies");
 
+var currentlyInsultingUser = "<@1054656340913573939>";
 
-function insult(){
-    console.log("Received insult command");
-    return stupidReply.getStupidReply();
+async function insult() {
+  console.log("Received insult command");
+  return `${currentlyInsultingUser} ` + (await stupidReply.getStupidReply());
 }
-
 
 function addNewInsult(phrase, username) {
   let reply;
-  if (username !== "samuraikirby7") {
+  if (username !== currentlyInsultingUser) {
     stupidReply.addStupidReply(phrase);
     reply = `Added new insult: ${phrase}`;
   } else {
-    reply =
-      "Fuck you Isaiah! You can't add insults for yourself (unless you want to)";
+    reply = `Fuck you ${currentlyInsultingUser}! You can't add insults for yourself (unless you want to)`;
+  }
+  return reply;
+}
+
+function insultNewUser(user) {
+    let reply;
+  if (user !== "<@448522510988738560>") {
+    reply = `Started insulting ${user}`;
+    currentlyInsultingUser = user;
+  } else {
+    reply = "I can't insult my creator. Pick another guy."
   }
   return reply;
 }
@@ -22,4 +32,6 @@ function addNewInsult(phrase, username) {
 module.exports = {
   addNewInsult: addNewInsult,
   insult: insult,
+  insultNewUser,
+  insultNewUser,
 };
