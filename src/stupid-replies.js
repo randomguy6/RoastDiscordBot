@@ -1,9 +1,11 @@
 const {getInsults, addInsult} = require('./mongo/mongo-dao')
+const axios = require('axios');
+
+const apiUrl = 'https://insult.mattbas.org/api/insult';
 
 async function getStupidReply() {
-  const replies = await getInsults();
-  let i = Math.floor(Math.random() * replies.length);
-  return replies[i];
+  const response = await axios.get(apiUrl);
+  return response.data.trim();
 };
 
 function addStupidReply(reply) {
