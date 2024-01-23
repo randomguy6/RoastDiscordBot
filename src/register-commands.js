@@ -59,7 +59,8 @@ function handleCommand(interaction) {
             commandService.insultNewUser(interaction.options._hoistedOptions[0].value)
         );
     } else if (commandName.includes("profanity")) {
-        profanityService.handleCommand(commandName, interaction.guildId, interaction.channelId).then(resp => interaction.reply(resp));
+        profanityService.handleCommand(commandName, interaction.guildId, interaction.channelId)
+            .then(resp => interaction.reply(resp));
     } else {
         interaction.reply(
             "You stupid fuck. I don't know what to fucking do about this!"
