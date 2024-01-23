@@ -27,6 +27,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
   commands.handleCommand(interaction);
 });
 
-commands.register();
+commands.register().then(() => console.log("Done registering slash commands!"));
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).then(() => console.log("App has logged into discord"));
