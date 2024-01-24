@@ -8,7 +8,12 @@ async function profanityCommandHandler(command, server, channel){
         await mongoDao.deleteChannelForProfanity(server, channel);
         return "Thank you! I will try to be more respectful now.";
     } else if(command === "profanity_status"){
-
+        const result = await mongoDao.findChannel(server, channel);
+        if(result.length !== 0) {
+            return "I am supposed to be nice with you guys!";
+        } else {
+            return "Fuck you! I am supposed to be fucking naughty with you guys!";
+        }
     } else {
         return "Sir/Ma'am! I don't know what to do here.";
     }

@@ -18,22 +18,22 @@ async function getInsultsFromMongo() {
     const client = getClient();
     const collection = client.db(DB_NAME).collection("insults");
     const result = await collection.findOne();
-    client.close();
+    await client.close();
     return result.insults;
 }
 
-async function addInsultToMongo(newInsult) {
+function addInsultToMongo(newInsult) {
     const client = getClient();
     const collection = client.db("IsaiahBot").collection("insults");
-    await collection.updateOne({}, {$addToSet: {insults: newInsult}});
-    client.close();
+    collection.updateOne({}, {$addToSet: {insults: newInsult}})
+        .then(() => client.close());
 }
 
 async function getCommandsFromMongo() {
     const client = getClient();
     const collection = client.db(DB_NAME).collection("commands");
     const result = await collection.find().toArray();
-    client.close();
+    await client.close();
     return result;
 }
 
@@ -41,7 +41,7 @@ function addChannelForProfanity(serverName, channelName) {
     const client = getClient();
     const collection = client.db(DB_NAME).collection("profanity");
     collection.updateOne(
-        {"sever": serverName},
+        {"server": serverName},
         {$addToSet: {"channels": channelName}},
         {upsert: true}
     ).then(() => client.close());
@@ -51,11 +51,23 @@ async function deleteChannelForProfanity(serverName, channelName) {
     const client = getClient();
     const collection = client.db(DB_NAME).collection("profanity");
     await collection.updateOne(
-        {"sever": serverName},
+        {"server": serverName},
         {$pull: {"channels": channelName}},
         {upsert: true}
     ).then(() => client.close());
 }
+
+async function findChannelAndGuildInProfanity(serverName, channelName){
+    const client = getClient();
+    const collection = client.db(DB_NAME).collection("profanity");
+    const result = await collection.findOne({
+        server: serverName,
+        channels: { $elemMatch: { $eq: channelName } }
+    });
+    await client.close();
+    return result;
+}
+
 
 module.exports = {
     getInsults: getInsultsFromMongo,
@@ -63,4 +75,5 @@ module.exports = {
     getCommands: getCommandsFromMongo,
     addChannelForProfanity: addChannelForProfanity,
     deleteChannelForProfanity: deleteChannelForProfanity,
+    findChannel: findChannelAndGuildInProfanity,
 };
