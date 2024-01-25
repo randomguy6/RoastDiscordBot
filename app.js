@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Client, IntentsBitField, Events } = require("discord.js");
 const commands = require("./src/register-commands");
+const stupidReply = require("./src/stupid-replies")
 
 const client = new Client({
   intents: [
@@ -19,7 +20,7 @@ client.once(Events.ClientReady, () => {
 client.on(Events.MessageCreate, async (message) => {
   if (message.author.username === "samuraikirby7") {
     console.log("Isaiah said something");
-    stupidReply.getStupidReply().then((insult) => message.reply(insult));
+    stupidReply.getStupidReply(null, null, true).then((insult) => message.reply(insult));
   }
 });
 

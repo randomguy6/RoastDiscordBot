@@ -1,4 +1,5 @@
-const mongoDao = require("../mongo/mongo-dao");
+const mongoDao = require("/src/mongo/mongo-dao");
+const profanityList = require("/resources/wordlist.json")
 
 async function profanityCommandHandler(command, server, channel){
     if(command === "enable_profanity"){
@@ -8,8 +9,7 @@ async function profanityCommandHandler(command, server, channel){
         await mongoDao.deleteChannelForProfanity(server, channel);
         return "Thank you! I will try to be more respectful now.";
     } else if(command === "profanity_status"){
-        const result = await mongoDao.findChannel(server, channel);
-        if(result.length !== 0) {
+        if(isProfanityOnForChannel(server, channel)) {
             return "I am supposed to be nice with you guys!";
         } else {
             return "Fuck you! I am supposed to be fucking naughty with you guys!";
@@ -19,6 +19,16 @@ async function profanityCommandHandler(command, server, channel){
     }
 }
 
+function isProfanityOnForChannel(server, channel){
+    return mongoDao.findChannel(server, channel).length !== 0;
+}
+
+function generateSentenceWithProfanity(sentence){
+
+}
+
 module.exports = {
     handleCommand: profanityCommandHandler,
+    isProfanityOnForChannel: isProfanityOnForChannel,
+    generateSentenceWithProfanity: generateSentenceWithProfanity,
 }
