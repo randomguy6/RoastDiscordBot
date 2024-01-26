@@ -1,30 +1,47 @@
-const mongoDao = require("/src/mongo/mongo-dao");
-const profanityList = require("/resources/wordlist.json")
+const mongoDao = require("../mongo/mongo-dao");
+const profanityList = require("../../resources/wordlist.json");
+const nlp = require("compromise");
 
-async function profanityCommandHandler(command, server, channel){
-    if(command === "enable_profanity"){
+const profanity = [
+    "fucking",
+    "mother fucking"
+]
+
+async function profanityCommandHandler(command, server, channel) {
+    if (command === "enable_profanity") {
         await mongoDao.addChannelForProfanity(server, channel);
         return "Fuck you! Now I have to start saying stupid shit here."
-    } else if(command === "disable_profanity"){
+    } else if (command === "disable_profanity") {
         await mongoDao.deleteChannelForProfanity(server, channel);
         return "Thank you! I will try to be more respectful now.";
-    } else if(command === "profanity_status"){
-        if(isProfanityOnForChannel(server, channel)) {
-            return "I am supposed to be nice with you guys!";
-        } else {
+    } else if (command === "profanity_status") {
+        if (await isProfanityOnForChannel(server, channel)) {
             return "Fuck you! I am supposed to be fucking naughty with you guys!";
+        } else {
+            return "I am supposed to be nice with you guys!";
         }
     } else {
         return "Sir/Ma'am! I don't know what to do here.";
     }
 }
 
-function isProfanityOnForChannel(server, channel){
-    return mongoDao.findChannel(server, channel).length !== 0;
+async function isProfanityOnForChannel(server, channel) {
+    const result = await mongoDao.findChannel(server, channel);
+    return (result !== null && result.length !== 0);
 }
 
-function generateSentenceWithProfanity(sentence){
-
+function generateSentenceWithProfanity(sentence) {
+    const doc = nlp(sentence);
+    const nounsIndex = nlp(sentence).termList()
+        .filter(term => term.tags.has("Noun") && term.text !== "I" && term.index[1] !== 0)
+        .map(term => term.index[1]);
+    let sentenceSplit = sentence.split(" ").map((word, index) => {
+        if(nounsIndex.includes(index)){
+            word = profanity[Math.floor(Math.random() * profanity.length)] + " " + word;
+        }
+        return word;
+    });
+    return sentenceSplit.join(" ");
 }
 
 module.exports = {

@@ -46,7 +46,7 @@ async function register() {
 function handleCommand(interaction) {
     const commandName = interaction.commandName;
     if (commandName === "insult") {
-        commandService.insult().then((insult) => interaction.reply(insult));
+        commandService.insult(interaction.guildId, interaction.channelId).then((insult) => interaction.reply(insult));
     } else if (commandName === "newinsult") {
         interaction.reply(
             commandService.addNewInsult(
