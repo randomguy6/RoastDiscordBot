@@ -1,5 +1,4 @@
 const mongoDao = require("../mongo/mongo-dao");
-const profanityList = require("../../resources/wordlist.json");
 const nlp = require("compromise");
 
 const profanity = [
@@ -31,7 +30,6 @@ async function isProfanityOnForChannel(server, channel) {
 }
 
 function generateSentenceWithProfanity(sentence) {
-    const doc = nlp(sentence);
     const nounsIndex = nlp(sentence).termList()
         .filter(term => term.tags.has("Noun") && term.text !== "I" && term.index[1] !== 0)
         .map(term => term.index[1]);
