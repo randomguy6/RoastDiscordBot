@@ -2,9 +2,9 @@ const stupidReply = require("../stupid-replies");
 
 var currentlyInsultingUser = "<@1054656340913573939>";
 
-async function insult() {
+async function insult(server, channel) {
   console.log("Received insult command");
-  return `${currentlyInsultingUser} ` + (await stupidReply.getStupidReply());
+  return `${currentlyInsultingUser} ${await stupidReply.getStupidReply(server, channel, false)}`;
 }
 
 function addNewInsult(phrase, username) {
@@ -29,9 +29,13 @@ function insultNewUser(user) {
   return reply;
 }
 
+function enableProfanityForChannel(serverName, channelName){
+
+}
+
 module.exports = {
   addNewInsult: addNewInsult,
   insult: insult,
-  insultNewUser,
-  insultNewUser,
+  insultNewUser: insultNewUser,
+  enableProfanity: enableProfanityForChannel,
 };
