@@ -4,7 +4,7 @@ https://insult.mattbas.org/api/insult
 ## Current features:
   - /insult
     - Insult the current username (default is set to @samuraikirby). It will use profanity if it is set to use profanity on the channel
-  - /insult_who @<username>
+  - /insult_who @\<username\>
     - Replace the user that the bot was set to insult to a new username
   - /enable_profanity
     - Make the bot insult with profanity in the channel this command is sent from
